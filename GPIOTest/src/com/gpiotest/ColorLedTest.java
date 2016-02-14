@@ -54,6 +54,8 @@ import com.pi4j.io.gpio.impl.GpioPinImpl;
  *                            
  *                            Long story short. Without a third PWM channel, two colors will be locked together (they BOTH get whatever value was set
  *                            on the channel last).
+ *                            
+ *                            Tags: Color, LED, RGB, PWM
  */
 
 /**
