@@ -43,60 +43,60 @@ import com.pi4j.io.gpio.event.GpioPinListenerDigital;
  *       |                      ^   ^       | 
  *       +----------------------+   +-------+     
  */
-public class ButtonTest 
+public class ButtonTest
 {
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) 
-	{
-    	InputStreamReader keyboard = new InputStreamReader(System.in);
-        char theInput = 'a';
+   /**
+    * @param args
+    */
+   public static void main(String[] args)
+   {
+      InputStreamReader keyboard = new InputStreamReader(System.in);
+      char theInput = 'a';
 
-        System.out.println("Button Test Started");
-		
-		final GpioController gpioController = GpioFactory.getInstance();
-		
-		final GpioPinDigitalInput myButton = gpioController.provisionDigitalInputPin(RaspiPin.GPIO_00, PinPullResistance.PULL_DOWN); // GPIO 17 (11)
+      System.out.println("Button Test Started");
 
-		// Setup listener for button events
-		myButton.addListener(new GpioPinListenerDigital() 
-		   {
-			
-			@Override
-			public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent theEvent) 
-			   {
-				  System.out.println("Button " + theEvent.getPin().getName() + " - " + theEvent.getState().getValue());
-			   }
-		    });
-		
-		// Use a loop to keep program alive and checking for keyboard input ('Q' to terminate)
-        do 
-        {
-        	try 
-        	{
-        		if (keyboard.ready())
-        		{
-				   theInput = (char)keyboard.read();
-        		}
-			} 
-        	catch (IOException e) 
-			{
-				e.printStackTrace();
-			}
-        	
-            try 
+      final GpioController gpioController = GpioFactory.getInstance();
+
+      final GpioPinDigitalInput myButton = gpioController.provisionDigitalInputPin(RaspiPin.GPIO_00, PinPullResistance.PULL_DOWN); // GPIO 17 (11)
+
+      // Setup listener for button events
+      myButton.addListener(new GpioPinListenerDigital()
+      {
+
+         @Override
+         public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent theEvent)
+         {
+            System.out.println("Button " + theEvent.getPin().getName() + " - " + theEvent.getState().getValue());
+         }
+      });
+
+      // Use a loop to keep program alive and checking for keyboard input ('Q' to terminate)
+      do
+      {
+         try
+         {
+            if (keyboard.ready())
             {
-				Thread.sleep(500);
-			} 
-            catch (InterruptedException e) 
-			{
-				e.printStackTrace();
-			}
-        } while (theInput !='Q');
+               theInput = (char) keyboard.read();
+            }
+         }
+         catch (IOException e)
+         {
+            e.printStackTrace();
+         }
 
-        gpioController.shutdown();
-	}
+         try
+         {
+            Thread.sleep(500);
+         }
+         catch (InterruptedException e)
+         {
+            e.printStackTrace();
+         }
+      } while (theInput != 'Q');
+
+      gpioController.shutdown();
+   }
 
 }

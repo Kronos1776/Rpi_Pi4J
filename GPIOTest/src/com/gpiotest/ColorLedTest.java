@@ -121,10 +121,8 @@ public class ColorLedTest
          // System.out.print("Green:" + df.format(greenValue) + " ");
          // System.out.println("Blue:" + df.format(blueValue));
          // --- Print out integer sent values... read pin values
-         // System.out.println((int)redValue + " " + (int)greenValue + " " +
-         // (int)blueValue);
-         // System.out.println(bluePin_imp.getPwm() + "-----" +
-         // redPin_imp.getPwm());
+         // System.out.println((int)redValue + " " + (int)greenValue + " " + (int)blueValue);
+         // System.out.println(bluePin_imp.getPwm() + "-----" + redPin_imp.getPwm());
 
          Thread.sleep(500);
 

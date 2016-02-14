@@ -50,52 +50,52 @@ import com.pi4j.io.gpio.RaspiPin;
  * blinking LED logic of a GPIO pin on the Raspberry Pi
  * using the Pi4J library.  
  */
-public class BlinkLedTest 
+public class BlinkLedTest
 {
-    
-    public static void main(String[] args) throws InterruptedException 
-    {
-    	InputStreamReader keyboard = new InputStreamReader(System.in);
-        char theInput = 'a';
-        
-        System.out.println("<--Pi4J--> GPIO Blink Example ... started.");
-        
-        // create gpio controller
-        final GpioController gpio = GpioFactory.getInstance();
-        
-        final GpioPinDigitalOutput led00 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_00); // GPIO 17 (11)
 
-        // continuously blink the led every 1/2 second for 15 seconds
-//        led1.blink(500, 15000);
-//
-//        // continuously blink the led every 1 second 
-//        led2.blink(1000);
-        
-        System.out.println(" ... the LED will continue blinking until the program is terminated.");
-        System.out.println(" ... Type 'Q' and press [ENTER] to terminate.");
-        
-        // keep program running until user aborts (CTRL-C)
-        do 
-        {
-        	try 
-        	{
-        		if (keyboard.ready())
-        		{
-				   theInput = (char)keyboard.read();
-        		}
-			} 
-        	catch (IOException e) 
-			{
-				e.printStackTrace();
-			}
-        	
-            Thread.sleep(1000);
-            led00.toggle();
-        } while (theInput !='Q');
-        
-        // stop all GPIO activity/threads
-        // (this method will forcefully shutdown all GPIO monitoring threads and scheduled tasks)
-        led00.setState(false);
-        gpio.shutdown();   // <--- implement this method call if you wish to terminate the Pi4J GPIO controller
-    }
+   public static void main(String[] args) throws InterruptedException
+   {
+      InputStreamReader keyboard = new InputStreamReader(System.in);
+      char theInput = 'a';
+
+      System.out.println("<--Pi4J--> GPIO Blink Example ... started.");
+
+      // create gpio controller
+      final GpioController gpio = GpioFactory.getInstance();
+
+      final GpioPinDigitalOutput led00 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_00); // GPIO 17 (11)
+
+      // continuously blink the led every 1/2 second for 15 seconds
+      // led1.blink(500, 15000);
+      //
+      // // continuously blink the led every 1 second
+      // led2.blink(1000);
+
+      System.out.println(" ... the LED will continue blinking until the program is terminated.");
+      System.out.println(" ... Type 'Q' and press [ENTER] to terminate.");
+
+      // keep program running until user aborts (CTRL-C)
+      do
+      {
+         try
+         {
+            if (keyboard.ready())
+            {
+               theInput = (char) keyboard.read();
+            }
+         }
+         catch (IOException e)
+         {
+            e.printStackTrace();
+         }
+
+         Thread.sleep(1000);
+         led00.toggle();
+      } while (theInput != 'Q');
+
+      // stop all GPIO activity/threads
+      // (this method will forcefully shutdown all GPIO monitoring threads and scheduled tasks)
+      led00.setState(false);
+      gpio.shutdown(); // <--- implement this method call if you wish to terminate the Pi4J GPIO controller
+   }
 }

@@ -57,50 +57,51 @@ import java.text.DecimalFormat;
  *     is on line 2
  *                                                
  */
-public class TempSensorTest 
+public class TempSensorTest
 {
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) 
-	{
-		BufferedReader tempSensorDevice_Slave = null;
-		int readCount = 0;
-		String[] temperatureData = new String[2];
-		double temperature = 0;
-		double temperatureF = 0;
-		DecimalFormat df = new DecimalFormat("#,##0.00");
+   /**
+    * @param args
+    */
+   public static void main(String[] args)
+   {
+      BufferedReader tempSensorDevice_Slave = null;
+      int readCount = 0;
+      String[] temperatureData = new String[2];
+      double temperature = 0;
+      double temperatureF = 0;
+      DecimalFormat df = new DecimalFormat("#,##0.00");
 
-		try {
-			tempSensorDevice_Slave = new BufferedReader(new FileReader("/sys/bus/w1/devices/28-0000075c717b/w1_slave"));
-			
-			while(tempSensorDevice_Slave.ready() && readCount < 2)
-			{
-				temperatureData[readCount] = tempSensorDevice_Slave.readLine();
-				readCount++;
-			}
-			
-			// Lines read in are similar to this
-			// 35 02 4b 46 7f ff 0b 10 76 : crc=76 YES
-			// 35 02 4b 46 7f ff 0b 10 76 t=35312
-			
-			temperature = Double.parseDouble(temperatureData[1].substring(temperatureData[1].indexOf("=") + 1));
-			temperature = temperature / 1000;
-			temperatureF = ((temperature * 9) / 5) + 32;
-			System.out.println("Raw Reading: " + temperatureData[1]);
-			System.out.println("Temperature in Celcius: " + df.format(temperature));
-			System.out.println("Temperature in Fahrenheit: " + df.format(temperatureF));
-		} 
-		catch (FileNotFoundException e) 
-		{
-			
-			e.printStackTrace();
-		} 
-		catch (IOException e) 
-		{
-			e.printStackTrace();
-		}
-	}
+      try
+      {
+         tempSensorDevice_Slave = new BufferedReader(new FileReader("/sys/bus/w1/devices/28-0000075c717b/w1_slave"));
+
+         while (tempSensorDevice_Slave.ready() && readCount < 2)
+         {
+            temperatureData[readCount] = tempSensorDevice_Slave.readLine();
+            readCount++;
+         }
+
+         // Lines read in are similar to this
+         // 35 02 4b 46 7f ff 0b 10 76 : crc=76 YES
+         // 35 02 4b 46 7f ff 0b 10 76 t=35312
+
+         temperature = Double.parseDouble(temperatureData[1].substring(temperatureData[1].indexOf("=") + 1));
+         temperature = temperature / 1000;
+         temperatureF = ((temperature * 9) / 5) + 32;
+         System.out.println("Raw Reading: " + temperatureData[1]);
+         System.out.println("Temperature in Celcius: " + df.format(temperature));
+         System.out.println("Temperature in Fahrenheit: " + df.format(temperatureF));
+      }
+      catch (FileNotFoundException e)
+      {
+
+         e.printStackTrace();
+      }
+      catch (IOException e)
+      {
+         e.printStackTrace();
+      }
+   }
 
 }

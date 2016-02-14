@@ -45,60 +45,60 @@ import com.pi4j.io.gpio.event.GpioPinListenerDigital;
  *     GROUND black wire (+) -----+                  +--------------- black wire (+) GROUND
  *                                                
  */
-public class BreakBeamTest 
+public class BreakBeamTest
 {
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) 
-	{
-    	InputStreamReader keyboard = new InputStreamReader(System.in);
-        char theInput = 'a';
+   /**
+    * @param args
+    */
+   public static void main(String[] args)
+   {
+      InputStreamReader keyboard = new InputStreamReader(System.in);
+      char theInput = 'a';
 
-        System.out.println("Break Beam Test Started");
-		
-		final GpioController gpioController = GpioFactory.getInstance();
-		
-		final GpioPinDigitalInput mySensor = gpioController.provisionDigitalInputPin(RaspiPin.GPIO_00, PinPullResistance.PULL_UP); // GPIO 17 (P4J 0)
+      System.out.println("Break Beam Test Started");
 
-		// Setup listener for sensor events
-		mySensor.addListener(new GpioPinListenerDigital() 
-		   {
-			
-			@Override
-			public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent theEvent) 
-			   {
-				  System.out.println("Sensor " + theEvent.getPin().getName() + " - " + theEvent.getState().getValue());
-			   }
-		    });
-		
-		// Use a loop to keep program alive and checking for keyboard input ('Q' to terminate)
-        do 
-        {
-        	try 
-        	{
-        		if (keyboard.ready())
-        		{
-				   theInput = (char)keyboard.read();
-        		}
-			} 
-        	catch (IOException e) 
-			{
-				e.printStackTrace();
-			}
-        	
-            try 
+      final GpioController gpioController = GpioFactory.getInstance();
+
+      final GpioPinDigitalInput mySensor = gpioController.provisionDigitalInputPin(RaspiPin.GPIO_00, PinPullResistance.PULL_UP); // GPIO 17 (P4J 0)
+
+      // Setup listener for sensor events
+      mySensor.addListener(new GpioPinListenerDigital()
+      {
+
+         @Override
+         public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent theEvent)
+         {
+            System.out.println("Sensor " + theEvent.getPin().getName() + " - " + theEvent.getState().getValue());
+         }
+      });
+
+      // Use a loop to keep program alive and checking for keyboard input ('Q' to terminate)
+      do
+      {
+         try
+         {
+            if (keyboard.ready())
             {
-				Thread.sleep(500);
-			} 
-            catch (InterruptedException e) 
-			{
-				e.printStackTrace();
-			}
-        } while (theInput !='Q');
+               theInput = (char) keyboard.read();
+            }
+         }
+         catch (IOException e)
+         {
+            e.printStackTrace();
+         }
 
-        gpioController.shutdown();
-	}
+         try
+         {
+            Thread.sleep(500);
+         }
+         catch (InterruptedException e)
+         {
+            e.printStackTrace();
+         }
+      } while (theInput != 'Q');
+
+      gpioController.shutdown();
+   }
 
 }
