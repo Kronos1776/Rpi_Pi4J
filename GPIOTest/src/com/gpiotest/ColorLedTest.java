@@ -61,80 +61,81 @@ import com.pi4j.io.gpio.impl.GpioPinImpl;
  * color LED on the Raspberry Pi
  * using the Pi4J library.  
  */
-public class ColorLedTest 
+public class ColorLedTest
 {
-    
-    public static void main(String[] args) throws InterruptedException 
-    {
-    	InputStreamReader keyboard = new InputStreamReader(System.in);
-        char theInput = 'a';
-        double redValue = 0;
-        double greenValue = 0;
-        double blueValue = 0;
-        // DecimalFormat df = new DecimalFormat("###0.00");
-        
-        System.out.println("<--Pi4J--> GPIO Color Example ... started.");
-        
-        // create gpio controller
-        final GpioController gpio = GpioFactory.getInstance();
-        
-        // Setup pins to be used
-        final GpioPinPwm redPin = gpio.provisionPwmOutputPin(RaspiPin.GPIO_01);   // Pulse Width Modulation (PWM) 
-        final GpioPinPwm greenPin = gpio.provisionPwmOutputPin(RaspiPin.GPIO_24); // Pulse Width Modulation (PWM) 
-        final GpioPinPwm bluePin = gpio.provisionPwmOutputPin(RaspiPin.GPIO_26);  // Pulse Width Modulation (PWM) 
-        
-        // Use a pin implementation that allows setting the pin value
-        final GpioPinImpl redPin_imp = new GpioPinImpl(gpio, GpioFactory.getDefaultProvider(), redPin.getPin());
-        final GpioPinImpl greenPin_imp = new GpioPinImpl(gpio, GpioFactory.getDefaultProvider(), greenPin.getPin());
-        final GpioPinImpl bluePin_imp = new GpioPinImpl(gpio, GpioFactory.getDefaultProvider(), bluePin.getPin());
-        
-        System.out.println(" ... the LED continue to change color until program has terminated.");
-        System.out.println(" ... Type 'Q' and press [ENTER] to terminate.");
-        
-        // --- Keep program running until user aborts 'Q'
-        do 
-        {
-        	try 
-        	{
-        		if (keyboard.ready())
-        		{
-				   theInput = (char)keyboard.read();
-        		}
-			} 
-        	catch (IOException e) 
-			{
-				e.printStackTrace();
-			}
-        	
-            // --- Get random values for the color strengths
-            redValue = Math.random() * 100;
-            greenValue = Math.random() * 100;
-            blueValue = Math.random() * 100;
-            
-            // --- Set the color values
-            redPin_imp.setPwm((int)redValue);
-            greenPin_imp.setPwm((int)greenValue);
-            bluePin_imp.setPwm((int)blueValue);
-            
-            // --- Print out color values that were sent
-//            System.out.print("Red:" + df.format(redValue) + " ");
-//            System.out.print("Green:" + df.format(greenValue) + " ");
-//            System.out.println("Blue:" + df.format(blueValue));
-            // --- Print out integer sent values... read pin values
-//            System.out.println((int)redValue + " " + (int)greenValue + " " + (int)blueValue);
-//            System.out.println(bluePin_imp.getPwm() + "-----" + redPin_imp.getPwm());
 
-            Thread.sleep(500); 
-            
-        } while (theInput !='Q');
-        
-        // Turn off all colors
-        redPin_imp.setPwm(0);
-        greenPin_imp.setPwm(0);
-        bluePin_imp.setPwm(0);
-        
-        // stop all GPIO activity/threads
-        // (this method will forcefully shutdown all GPIO monitoring threads and scheduled tasks)
-        gpio.shutdown();   // <--- implement this method call if you wish to terminate the Pi4J GPIO controller
-    }
+   public static void main(String[] args) throws InterruptedException
+   {
+      InputStreamReader keyboard = new InputStreamReader(System.in);
+      char theInput = 'a';
+      double redValue = 0;
+      double greenValue = 0;
+      double blueValue = 0;
+      // DecimalFormat df = new DecimalFormat("###0.00");
+
+      System.out.println("<--Pi4J--> GPIO Color Example ... started.");
+
+      // create gpio controller
+      final GpioController gpio = GpioFactory.getInstance();
+
+      // Setup pins to be used
+      final GpioPinPwm redPin = gpio.provisionPwmOutputPin(RaspiPin.GPIO_01); // Pulse Width Modulation (PWM)
+      final GpioPinPwm greenPin = gpio.provisionPwmOutputPin(RaspiPin.GPIO_24); // Pulse Width Modulation (PWM)
+      final GpioPinPwm bluePin = gpio.provisionPwmOutputPin(RaspiPin.GPIO_26); // Pulse Width Modulation (PWM)
+
+      // Use a pin implementation that allows setting the pin value
+      final GpioPinImpl redPin_imp = new GpioPinImpl(gpio, GpioFactory.getDefaultProvider(), redPin.getPin());
+      final GpioPinImpl greenPin_imp = new GpioPinImpl(gpio, GpioFactory.getDefaultProvider(), greenPin.getPin());
+      final GpioPinImpl bluePin_imp = new GpioPinImpl(gpio, GpioFactory.getDefaultProvider(), bluePin.getPin());
+
+      System.out.println(" ... the LED continue to change color until program has terminated.");
+      System.out.println(" ... Type 'Q' and press [ENTER] to terminate.");
+
+      // --- Keep program running until user aborts 'Q'
+      do
+      {
+         try
+         {
+            if (keyboard.ready())
+            {
+               theInput = (char) keyboard.read();
+            }
+         }
+         catch (IOException e)
+         {
+            e.printStackTrace();
+         }
+
+         // --- Get random values for the color strengths
+         redValue = Math.random() * 100;
+         greenValue = Math.random() * 100;
+         blueValue = Math.random() * 100;
+
+         // --- Set the color values
+         redPin_imp.setPwm((int) redValue);
+         greenPin_imp.setPwm((int) greenValue);
+         bluePin_imp.setPwm((int) blueValue);
+
+         // --- Print out color values that were sent
+         // System.out.print("Red:" + df.format(redValue) + " ");
+         // System.out.print("Green:" + df.format(greenValue) + " ");
+         // System.out.println("Blue:" + df.format(blueValue));
+         // --- Print out integer sent values... read pin values
+         // System.out.println((int)redValue + " " + (int)greenValue + " " +
+         // (int)blueValue);
+         // System.out.println(bluePin_imp.getPwm() + "-----" +
+         // redPin_imp.getPwm());
+
+         Thread.sleep(500);
+
+      } while (theInput != 'Q');
+
+      // Turn off all colors
+      redPin_imp.setPwm(0);
+      greenPin_imp.setPwm(0);
+      bluePin_imp.setPwm(0);
+
+      // stop all GPIO activity/threads (this method will forcefully shutdown all GPIO monitoring threads and scheduled tasks)
+      gpio.shutdown(); // <--- implement this method call if you wish to terminate the Pi4J GPIO controller
+   }
 }
