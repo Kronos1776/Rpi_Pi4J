@@ -23,6 +23,15 @@ import com.hopding.jrpicam.RPiCamera;
 /*
  * Diagram is for Raspberry Pi 2 model B
  * Setup for this program:  BCM = Broadcom;   P4J = Pi4J (Java API)
+ *															                         _    
+ *															                       /| |\  
+ *															                       \| |/
+ *															                        |_|--------------- black wire (-) GROUND
+ *															                        | |
+ *															                        | +--------------- yellow wire GPIO21
+ *															                        |
+ *															                        +----------------- red wire (+) 5V
+ *
  *                                                                                                                                            
  *       |      |      |      |      |      |      |      |      |      |      |      |      |      |      |      |      |      |      |      |
  *       |      |      |      |      |      |      |      |      |      |      |      |      |      |      |      |      |      |      |      |
@@ -42,15 +51,20 @@ import com.hopding.jrpicam.RPiCamera;
  *       |      |      |      |      |      |      |      |      |      |      |      |      |      |      |      |      |      |      |      |
  *       |      |      |      |      |      |      |      |      |      |      |      |      |      |      |      |      |      |      |      |
  *                                          
- *                        _    
- *                      /| |\  
- *                      \| |/
- *                       |_|--------------- black wire (-) GROUND
- *                       | |
- *                       | +--------------- yellow wire GPIO21
- *                       |
- *                       +----------------- red wire (+) 5V
- *                                                
+ *                                   B      A    
+ *                                   ^      ^ 
+ *                                 +-+      +-+
+ *                                 |    __    |
+ *                                 |   /  \   |
+ *                                 |   |  |   +--+
+ *                                 |   |__|      < resistor
+ *                                 |   |  |led   >
+ *                                 |   |  |      <
+ *                                 |   |  |      >
+ *                                 |   B  |   +--+
+ *                                 |   ^  A   |
+ *                                 |   |  ^   |
+ *                                 +---+  +---+                                               
  */
 
 public class MotionSensor {
