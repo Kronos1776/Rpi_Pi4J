@@ -26,11 +26,9 @@ public class PyFingerPrint {
 	      final GpioController gpioLED1 = GpioFactory.getInstance();		
 		  final GpioPinDigitalOutput ledRed = gpioLED1.provisionDigitalOutputPin(RaspiPin.GPIO_06);
 		  
-		  
 		Runtime rt = Runtime.getRuntime();
 		try
 		{
-
 			System.out.println("Waiting for you to scan your finger");
 			Process fp = rt.exec("python2 /usr/share/doc/python-fingerprint/examples/example_search.py");
 	
@@ -52,16 +50,15 @@ public class PyFingerPrint {
 	    			Thread.sleep(1000);
 	    			ledRed.low();
 	            }
+	            System.out.println(s.substring(s.lastIndexOf(":") + 1).replaceAll("\\s", ""));
 	        }
 	        BufferedReader stdError = new BufferedReader(new InputStreamReader(fp.getErrorStream()));
-
 	        // read any errors from the attempted command
 	        System.out.println("Here is the standard error of the command (if any):\n");
 	        while ((s = stdError.readLine()) != null) {
 	            System.out.println(s);
 	            System.out.println(" here");
 	        }
-	        
 	        System.exit(0);
 	    }
     catch (IOException e) {

@@ -7,6 +7,19 @@ import com.pi4j.io.gpio.GpioController;
 import com.pi4j.io.gpio.GpioFactory;
 import com.pi4j.io.gpio.GpioPinDigitalOutput;
 import com.pi4j.io.gpio.RaspiPin;
+import com.pi4j.io.gpio.exception.UnsupportedBoardType;
+import com.pi4j.io.serial.Baud;
+import com.pi4j.io.serial.DataBits;
+import com.pi4j.io.serial.FlowControl;
+import com.pi4j.io.serial.Parity;
+import com.pi4j.io.serial.Serial;
+import com.pi4j.io.serial.SerialConfig;
+import com.pi4j.io.serial.SerialDataEvent;
+import com.pi4j.io.serial.SerialDataEventListener;
+import com.pi4j.io.serial.SerialFactory;
+import com.pi4j.io.serial.SerialPort;
+import com.pi4j.io.serial.StopBits;
+import com.pi4j.util.Console;
 
 /*
  * Diagram is for Raspberry Pi 2 model B
@@ -50,58 +63,53 @@ import com.pi4j.io.gpio.RaspiPin;
  * blinking LED logic of a GPIO pin on the Raspberry Pi
  * using the Pi4J library.  
  */
-public class BlinkLedTest
+public class SerialTest
 {
 
    public static void main(String[] args) throws InterruptedException
    {
-      InputStreamReader keyboard = new InputStreamReader(System.in);
-      char theInput = 'a';
+	   // to check if serial port is initialized
 
-      System.out.println("<--Pi4J--> GPIO Blink Example ... started.");
-
-      // create gpio controller
-      final GpioController gpio = GpioFactory.getInstance();
-
-      final GpioPinDigitalOutput led00 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_00); // GPIO 17 (11)
-
-      final GpioController gpio1 = GpioFactory.getInstance();
-
-      final GpioPinDigitalOutput led01 = gpio1.provisionDigitalOutputPin(RaspiPin.GPIO_06); // GPIO 17 (11)
-
-      // continuously blink the led every 1/2 second for 15 seconds
-      // led1.blink(500, 15000);
-      //
-      // // continuously blink the led every 1 second
-      // led2.blink(1000);
-
-      System.out.println(" ... the LED will continue blinking until the program is terminated.");
-      System.out.println(" ... Type 'Q' and press [ENTER] to terminate.");
-
-      // keep program running until user aborts (CTRL-C)
-      do
-      {
-         try
-         {
-            if (keyboard.ready())
-            {
-               theInput = (char) keyboard.read();
-            }
-         }
-         catch (IOException e)
-         {
-            e.printStackTrace();
-         }
-
-         Thread.sleep(1000);
-         led00.toggle();
-         led01.toggle();
-      } while (theInput != 'Q');
-
-      // stop all GPIO activity/threads
-      // (this method will forcefully shutdown all GPIO monitoring threads and scheduled tasks)
-      led00.setState(false);
-      led01.setState(false);
-      gpio.shutdown(); // <--- implement this method call if you wish to terminate the Pi4J GPIO controller
+	   
+	
+      final Serial serial = SerialFactory.createInstance();
+      
+      serial.addListener(new SerialDataEventListener() {
+		
+		@Override
+		public void dataReceived(SerialDataEvent arg0) {
+			System.out.println("Received Data");
+		}
+	});
+      
+    try 
+    {
+    	System.out.println("Processing Started");
+    	
+		SerialConfig config = new SerialConfig();
+		config.device(SerialPort.getDefaultPort())
+		      .baud(Baud._38400)
+		      .dataBits(DataBits._8)
+		      .parity(Parity.NONE)
+		      .stopBits(StopBits._1)
+		      .flowControl(FlowControl.NONE);
+		
+		serial.open(config);
+		
+		serial.write("Hello World");
+		
+		serial.close();
+		
+		System.out.println("Processing Complete");
+	} catch (UnsupportedBoardType e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (IllegalStateException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
    }
 }
