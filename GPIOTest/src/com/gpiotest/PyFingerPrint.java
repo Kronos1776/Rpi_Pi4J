@@ -20,11 +20,11 @@ public class PyFingerPrint {
 	      String s = null;
 	      String search = "SHA";
 	      String notFound = "NO";
-	      final GpioController gpioLED = GpioFactory.getInstance();		
-		  final GpioPinDigitalOutput led = gpioLED.provisionDigitalOutputPin(RaspiPin.GPIO_00);
+	     // final GpioController gpioLED = GpioFactory.getInstance();		
+		 // final GpioPinDigitalOutput led = gpioLED.provisionDigitalOutputPin(RaspiPin.GPIO_00); //pin 17 to green led
 		  
 	      final GpioController gpioLED1 = GpioFactory.getInstance();		
-		  final GpioPinDigitalOutput ledRed = gpioLED1.provisionDigitalOutputPin(RaspiPin.GPIO_06);
+		  final GpioPinDigitalOutput ledRed = gpioLED1.provisionDigitalOutputPin(RaspiPin.GPIO_02);
 		  
 		Runtime rt = Runtime.getRuntime();
 		try
@@ -38,18 +38,21 @@ public class PyFingerPrint {
 	        System.out.println("Here is the standard output of the command:\n");
 	        while ((s = stdInput.readLine()) != null) {
 	        	System.out.println(s);
-	            if(s.toLowerCase().indexOf(search.toLowerCase())!= -1)
+	        	// no led on/off required as added a line to python code
+/*	            if(s.toLowerCase().indexOf(search.toLowerCase())!= -1)
 	            {
+	            	System.out.println("Did");
 	    			led.high();
 	    			Thread.sleep(1000);
 	    			led.low();
 	            }
 	            if(s.toLowerCase().contains(notFound.toLowerCase()))
 	            {
+	            	System.out.println("Didnott");
 	    			ledRed.high();
 	    			Thread.sleep(1000);
 	    			ledRed.low();
-	            }
+	            }*/
 	            System.out.println(s.substring(s.lastIndexOf(":") + 1).replaceAll("\\s", ""));
 	        }
 	        BufferedReader stdError = new BufferedReader(new InputStreamReader(fp.getErrorStream()));

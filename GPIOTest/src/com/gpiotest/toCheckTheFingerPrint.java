@@ -21,11 +21,13 @@ public class toCheckTheFingerPrint {
 		String fingerPrint = null;
 		Scanner in = new Scanner(System.in);
 		String s;
-		con = java.sql.DriverManager.getConnection("jdbc:mysql://10.131.25.142:3306/information_pi", "raspberry", "raspberrypi");
 
 		Runtime rt = Runtime.getRuntime();
 	try
 	{
+		Class.forName("com.mysql.jdbc.Driver");
+		con = java.sql.DriverManager.getConnection("jdbc:mysql://10.131.25.142:3306/information_pi", "raspberry", "raspberrypi");
+System.out.println("hete");
 		System.out.println("Enter your Employee name");
 		empName = in.nextLine();
 		System.out.println("This is what you entered "+empName);
