@@ -25,14 +25,19 @@ public class InmateInfoKey
       JFrame inmateIdFrame = new JFrame("Button Example");
       // InmateInfoFrame inmateInfoFrame = new InmateInfoFrame();
 
-      JLabel textLabel = new JLabel("Enter ID number:");
-      textLabel.setBounds(50, 20, 100, 30);
-
-      JTextField tf = new JTextField();
-      tf.setBounds(50, 50, 150, 20);
+      String [] siteOptions = { "TCF" , "TCA" , "COR" , "OTR" };
+      final JComboBox siteList = new JComboBox(siteOptions);
+      siteList.setBounds(50, 20, 200, 31);
+      
+      JLabel enterIDLabel = new JLabel("Enter ID number:");
+      enterIDLabel.setBounds(50, 70, 100, 30);
+      
+      
+      final JTextField inmateidField = new JTextField();
+      inmateidField.setBounds(50, 100, 200, 20);
 
       JButton bttn = new JButton("Click Here");
-      bttn.setBounds(50, 100, 95, 30);
+      bttn.setBounds(50, 150, 95, 30);
       try
       {
          bttn.addActionListener(new ActionListener()
@@ -42,7 +47,9 @@ public class InmateInfoKey
             {
              //  String value = tf.getText();
 
-               Connection con = null;
+        	   	String inmateId = inmateidField.getText();
+        	   	String siteId = (String) siteList.getSelectedItem();
+                Connection con = null;
 
                try
                {
@@ -50,7 +57,7 @@ public class InmateInfoKey
                      con = DriverManager.getConnection("jdbc:mysql://10.131.1.133:3306/ims?zeroDateTimeBehavior=convertToNull&useSSL=true&verifyServerCertificate=false&requireSSL=true", "ims", "ims");
 
                      PreparedStatement selectInmateImagePS = null;
-                     ResultSet selectInmateImageRS = null;
+                     java.sql.ResultSet selectInmateImageRS = null;
                      String selectInmateImageSQL = "select  " +
                            "  i.inmateid,  " +
                            "  i.firstname,  " +
@@ -65,8 +72,8 @@ public class InmateInfoKey
                            "    i.siteid = im.siteid and " +
                            "    i.arrivalDate = im.arrivalDate " +
                            "where  " +
-                           "  i.siteid='COR' and  " +
-                           "  i.inmateid='131' and " +
+                           "  i.siteid= ? and  " +
+                           "  i.inmateid= ? and " +
                            "  i.departureDate is null and " +
                            "  im.primaryImage = 1 ";
 
@@ -75,7 +82,12 @@ public class InmateInfoKey
                      String inmateid = null;
 
                      selectInmateImagePS = con.prepareStatement(selectInmateImageSQL);
+
+                     selectInmateImagePS.setString(1, siteId);
+                     selectInmateImagePS.setString(2, inmateId);
+                     
                      selectInmateImageRS = selectInmateImagePS.executeQuery();
+                     
                      if (selectInmateImageRS.next())
                      {
                         java.sql.Blob blob = null;
@@ -87,13 +99,14 @@ public class InmateInfoKey
                         blob = selectInmateImageRS.getBlob("im.image");
                       
                         new InmateInfoFrame(firstname, lastname, inmateid, blob);
-                        new CheckFingerPrint();
+                        //new CheckFingerPrint();
                      }
                      else
                      {
-                        System.out.println("Data not found");
+
+                    	      System.out.println("Data not found");
+
                      }
-                  
                }
                catch (NumberFormatException numE)
                {
@@ -130,12 +143,15 @@ public class InmateInfoKey
             }
          });
 
-         inmateIdFrame.add(textLabel);
+         inmateIdFrame.add(enterIDLabel);
+
          inmateIdFrame.add(bttn);
-         inmateIdFrame.add(tf);
+         inmateIdFrame.add(inmateidField);
+         inmateIdFrame.add(siteList);
          inmateIdFrame.setSize(400, 400);
          inmateIdFrame.setLayout(null);
          inmateIdFrame.setVisible(true);
+         new CheckFingerPrint();
       }
       catch (NumberFormatException e1)
       {

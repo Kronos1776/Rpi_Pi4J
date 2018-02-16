@@ -1,11 +1,23 @@
 package com.gpiotest;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
+
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
 
 public class TakeFingerPrint {
 
@@ -16,36 +28,52 @@ public class TakeFingerPrint {
 		
 		try
 		{
-
 			String s;
+		      JFrame inmateIdFrame = new JFrame("Button Example");
+		      // InmateInfoFrame inmateInfoFrame = new InmateInfoFrame();
 
-			//to get a fingerprint from the user
-			Runtime rt = Runtime.getRuntime();
+		      String [] siteOptions = { "TCF" , "TCA" , "COR" , "OTR" };
+		      final JComboBox siteList = new JComboBox(siteOptions);
+		      siteList.setBounds(50, 20, 200, 31);
+		      
+		      JLabel enterIDLabel = new JLabel("Enter ID number:");
+		      enterIDLabel.setBounds(50, 70, 100, 30);
+		      
+		      
+		      final JTextField inmateidField = new JTextField();
+		      inmateidField.setBounds(50, 100, 200, 20);
 
-			System.out.println("Waiting for you to scan your finger");
-			Process fp = rt.exec("python2 /usr/share/doc/python-fingerprint/examples/example_enroll.py");
+		      JButton bttn = new JButton("Click Here");
+		      bttn.setBounds(50, 150, 95, 30);
+		      
+		      
+		      String empId= "";
+		      
+		      String empName = "";
+		      
+		      empId = inmateidField.getText();
+		      String siteId = (String) siteList.getSelectedItem();
+		   
+		         inmateIdFrame.add(enterIDLabel);
 
-	        BufferedReader stdInput = new BufferedReader(new InputStreamReader(fp.getInputStream()));
-			
-	        while ((s = stdInput.readLine()) != null) {
-	        	System.out.println(s);
-	        	//gives the String for fingerprint
-	            System.out.println(s.substring(s.lastIndexOf(":") + 1).replaceAll("\\s", ""));
-	           
-	        }
-	        BufferedReader stdError = new BufferedReader(new InputStreamReader(fp.getErrorStream()));
-	        // read any errors from the attempted command
-	        System.out.println("Here is the standard error of the command (if any):\n");
-	        while ((s = stdError.readLine()) != null) {
-	            System.out.println(s);
-	            System.out.println(" here");
-	        }
-	        System.exit(0);
-
-		}
-		catch(Exception e)
-		{
-			System.out.println(e.getMessage());
-		}
+		         inmateIdFrame.add(bttn);
+		         inmateIdFrame.add(inmateidField);
+		         inmateIdFrame.add(siteList);
+		         inmateIdFrame.setSize(400, 400);
+		         inmateIdFrame.setLayout(null);
+		         inmateIdFrame.setVisible(true);
+		         new CheckFingerPrint();
+	      }
+	      catch (NumberFormatException e1)
+	      {
+	         System.out.println("Wahoo");
+	         System.out.println(e1);
+	      }
+	      catch (Exception e)
+	      {
+	         System.out.println("Nooooo!");
+	         System.out.println("error" + e);
+	      }
 	}
 }
+
