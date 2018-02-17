@@ -75,7 +75,7 @@ public class EnrollFingerPrint {
 	
 				String empId;
 				String siteId;
-	
+
 				Connection con = null;
 				Class.forName("com.mysql.jdbc.Driver");
 	
@@ -115,7 +115,11 @@ public class EnrollFingerPrint {
 						if(selecttheidRS.getString("fingerprint").equals(""))
 						{
 							System.out.println("Important");
-							EnrollSecondScreen enrollF = new EnrollSecondScreen();
+							EnrollSecondScreen enrollF = new EnrollSecondScreen(empId, siteId);
+						}
+						else
+						{
+							System.out.println("Already enrolled");
 						}
 					}
 /*					do {
@@ -137,9 +141,14 @@ public class EnrollFingerPrint {
 			catch (SQLException e) 
 			{
 	
-			} catch (ClassNotFoundException ee) 
+			} 
+			catch (ClassNotFoundException ee) 
 			{
 	
+			}
+			catch(NullPointerException ex)
+			{
+				System.out.println("DB Value for fingerprint is null");
 			}
 			}
 		});
